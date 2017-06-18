@@ -4,10 +4,19 @@ var CELL_SIZE = CANVAS_SIZE/GRID_SIZE;
 var grid;
 var button;
 var play;
+var slider_speed;
+
 
 function setup() {
 	grid = new Grid();
 	createCanvas(CANVAS_SIZE, CANVAS_SIZE);
+	
+	
+	
+	
+	slider_speed = createSlider(1, 200, 10, 1);
+	slider_speed.style('width', '80px');
+	
 	
 	button = createButton("Play");
 	button.mousePressed(play_pause);
@@ -20,22 +29,22 @@ function play_pause(){
 }
 
 function draw() {
+	
+	
+			
+		background(0);
 		
-	background(0);
-	
-	stroke(255, 255, 255);
-	
-	
-	//draw
-	grid.show();
-	
-	
-	
-	//update
-	if (play){
+		stroke(255, 255, 255);
+		
+		
+		//draw
+		grid.show();
+		
+		
+	if(play && frameCount % slider_speed.value() == 0){	
+		//update
 		grid.update();
 	}
-	
 }
 
 function mousePressed(){
