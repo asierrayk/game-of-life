@@ -56,4 +56,9 @@ function Grid(){
 			}
 		}
 	}
+	
+	
+	this.changeCell = function(i, j){
+		this.grid[i][j] = 1 - this.grid[i][j];
+	}
 }
