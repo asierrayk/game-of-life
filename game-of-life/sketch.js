@@ -1,5 +1,5 @@
-var GRID_SIZE = 20;
-var CANVAS_SIZE = 550;
+var GRID_SIZE = 50;
+var CANVAS_SIZE = 600;
 var CELL_SIZE = CANVAS_SIZE/GRID_SIZE;
 var grid;
 var button;
@@ -49,7 +49,15 @@ function draw() {
 
 function mousePressed(){
 	if (0<=mouseX && mouseX<=CANVAS_SIZE && 0<=mouseY && mouseY<=CANVAS_SIZE){
-		console.log("entra");
 		this.grid.changeCell(ceil(mouseX/CELL_SIZE), ceil(mouseY/CELL_SIZE));
+	}
+}
+
+function mouseWheel(){
+	if (0<=mouseX && mouseX<=CANVAS_SIZE && 0<=mouseY && mouseY<=CANVAS_SIZE){
+		var a = this.grid.grid[ceil(mouseX/CELL_SIZE)][ceil(mouseY/CELL_SIZE)];
+		
+		console.log(a.neighbors);
+		console.log(a.acumNeighbors);
 	}
 }

@@ -1,64 +1,75 @@
 function Grid(){
 	this.grid = new Array(GRID_SIZE+2);
-	this.nextGrid = new Array(GRID_SIZE+2);
-	this.neighbors = new Array(GRID_SIZE+2);
 	
 	
 	for (var i = 0; i < GRID_SIZE+2; i++) {
 	  this.grid[i] = new Array(GRID_SIZE+2);
-	  this.nextGrid[i] = new Array(GRID_SIZE+2);
-	  this.neighbors[i] = new Array(GRID_SIZE+2);
 	  
 	  for (var j = 0; j < GRID_SIZE+2; j++){
-		  this.grid[i][j] = 0;
-		  this.nextGrid[i][j] = 0;
-		  this.neighbors[i][j] = 0;
+		  this.grid[i][j] = new Cell(i,j);
 	  }
 	}
 	
-	this.grid[1][1] = 1;
-	this.grid[2][2] = 1;
-	this.grid[3][3] = 1;
-	this.grid[3][4] = 1;
-	this.grid[4][3] = 1;
 	
 	this.show = function(){
 		for (var i = 1; i <= GRID_SIZE; i++) {
 			for (var j = 1; j <= GRID_SIZE; j++) {
-				if (this.grid[i][j] == 1) {
-					fill(255,255,255);
-				}
-				else {
-					fill(0,0,0);
-				}
-				rect((i-1)*CELL_SIZE, (j-1)*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+				this.grid[i][j].show();
 			}
 		}
 	}
 	
 	this.update = function(){
+		
+		this.updateNeighbors();
+		
 		for (var i = 1; i <= GRID_SIZE; i++) {
 			for (var j = 1; j <= GRID_SIZE; j++) {
 				
-				var n = this.grid[i-1][j-1] + this.grid[i][j-1] + this.grid[i+1][j-1] + this.grid[i-1][j] + this.grid[i+1][j] + this.grid[i-1][j+1] + this.grid[i][j+1] + this.grid[i+1][j+1]; 
-				
-				this.nextGrid[i][j] = 0;
-				if (this.grid[i][j] == 1 && n == 2 || n == 3) this.nextGrid[i][j] = 1;
-				if (this.grid[i][j] == 0 && n == 3) this.nextGrid[i][j] = 1;
+				var n = this.grid[i][j].neighbors;
+				if (this.grid[i][j].alive && n != 2 && n != 3){
+					this.changeCell(i,j);
+				}
+				if (!this.grid[i][j].alive && n == 3){
+					this.changeCell(i,j);
+				}
 
 			}
 		}
-
-
-		for (var i=0; i < GRID_SIZE+2; i++){
-			for (var j=0; j < GRID_SIZE+2; j++){
-				this.grid[i][j] = this.nextGrid[i][j];
+		
+	}
+	
+	
+	this.updateNeighbors = function(){
+		for (var i = 1; i <= GRID_SIZE; i++) {
+			for (var j = 1; j <= GRID_SIZE; j++) {
+					this.grid[i][j].updateNeighbors();
 			}
 		}
 	}
 	
 	
 	this.changeCell = function(i, j){
-		this.grid[i][j] = 1 - this.grid[i][j];
+		console.log("hola");
+		console.log(i);
+		console.log(j);
+		var incrementNeighbors;
+		if (this.grid[i][j].alive){
+			this.grid[i][j].alive = false;
+			incrementNeighbors = -1;
+		}
+		else {
+			this.grid[i][j].alive = true;
+			incrementNeighbors = 1;
+		}
+
+		
+		for(k = i-1; k <= i+1; k++){
+			for (var l = j-1; l <= j+1; l++){
+				if (k == i && l == j) continue;
+				this.grid[k][l].modifyNeighbors(incrementNeighbors);
+			}
+		}
+		
 	}
 }
