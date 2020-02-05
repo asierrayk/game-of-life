@@ -50,9 +50,6 @@ function Grid(){
 	
 	
 	this.changeCell = function(i, j){
-		console.log("hola");
-		console.log(i);
-		console.log(j);
 		var incrementNeighbors;
 		if (this.grid[i][j].alive){
 			this.grid[i][j].alive = false;
